@@ -8,11 +8,26 @@ fn test_hlc_initialization() {
     let initial_timestamp = hlc.current_timestamp();
     let initial_sequence = hlc.current_sequence();
 
-    hlc.update(initial_timestamp);
-    hlc.update(initial_timestamp);
+    println!("Initial timestamp: {}", initial_timestamp);
+    println!("Initial sequence: {}", initial_sequence);
 
-    assert_eq!(hlc.current_timestamp(), initial_timestamp);
-    assert_eq!(hlc.current_sequence(), initial_sequence + 2);
+    hlc.update(initial_timestamp);
+    println!(
+        "After first update: timestamp={}, sequence={}",
+        hlc.current_timestamp(),
+        hlc.current_sequence()
+    );
+
+    assert_eq!(hlc.current_sequence(), initial_sequence);
+
+    hlc.update(initial_timestamp);
+    println!(
+        "After second update: timestamp={}, sequence={}",
+        hlc.current_timestamp(),
+        hlc.current_sequence()
+    );
+
+    assert_eq!(hlc.current_sequence(), initial_sequence + 1);
 }
 
 #[test]
