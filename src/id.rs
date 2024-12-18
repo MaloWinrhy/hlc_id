@@ -21,8 +21,20 @@ impl HLCId {
 
     pub fn to_u128(&self) -> u128 {
         ((self.timestamp as u128) << 64)
-         | ((self.node_id as u128) << 46)
+         | ((self.node_id as u128) << 48)
          | self.sequence as u128
+    }
+
+    pub fn from_u128(id: u128) -> Self {
+        let timestamp = (id >> 64) as u64;
+        let node_id = ((id >> 48) & 0x3FF) as u16;
+        let sequence = (id & 0x3FFFF) as u16;
+        
+        HLCId {
+            timestamp,
+            node_id,
+            sequence,
+        }
     }
 }
 
