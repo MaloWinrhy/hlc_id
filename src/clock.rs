@@ -18,7 +18,17 @@ impl HybridLogicalClock {
     }
 
     pub fn update(&mut self, external_timestamp: u64) {
-        self.timestamp = self.timestamp.max(external_timestamp);
+        let currnet_timestamp = Utc::now().timestamp_millis() as u64;
+
+        if external_timestamp > currnet_timestamp {
+            self.timestamp = external_timestamp;
+            self.sequence = 0;
+        } else if external_timestamp == currnet_timestamp {
+            self.sequence += 1;
+        } else {
+            self.timestamp = currnet_timestamp;
+            self.sequence = 0;
+        }
     }
 
     pub fn current_timestamp(&self) -> u64 {
