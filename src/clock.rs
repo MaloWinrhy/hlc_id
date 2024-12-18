@@ -1,13 +1,18 @@
+use chrono::Utc;
+
 pub struct HybridLogicalClock {
     timestamp: u64,
+    sequence: u16,
     node_id: u16,
 }
 
 impl HybridLogicalClock {
 
     pub fn new(node_id : u16) -> HybridLogicalClock {
+        let timestamp = Utc::now().timestamp_millis() as u64;
         HybridLogicalClock {
-            timestamp: 0,
+            timestamp,
+            sequence: 0,
             node_id,
         }
     }
