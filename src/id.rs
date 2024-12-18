@@ -1,3 +1,5 @@
+use chrono::Utc;
+
 use crate::clock::HybridLogicalClock;
 
 pub struct HLCId {
@@ -9,9 +11,9 @@ pub struct HLCId {
 impl HLCId {
 
     pub fn generate(clock: &mut HybridLogicalClock) -> Self {
-
-        clock.update(clock.current_timestamp());
-
+        let current_timestamp = Utc::now().timestamp_millis() as u64;
+        clock.update(current_timestamp);
+    
         HLCId {
             timestamp: clock.current_timestamp(),
             sequence: clock.current_sequence(),
@@ -29,7 +31,7 @@ impl HLCId {
         let timestamp = (id >> 64) as u64;
         let node_id = ((id >> 48) & 0x3FF) as u16;
         let sequence = (id & 0x3FFFF) as u16;
-        
+
         HLCId {
             timestamp,
             node_id,

@@ -4,6 +4,7 @@ pub struct HybridLogicalClock {
     timestamp: u64,
     sequence: u16,
     node_id: u16,
+    initialized: bool,
 }
 
 impl HybridLogicalClock {
@@ -14,21 +15,34 @@ impl HybridLogicalClock {
             timestamp,
             sequence: 0,
             node_id,
+            initialized: false,
         }
     }
 
     pub fn update(&mut self, external_timestamp: u64) {
-        let currnet_timestamp = Utc::now().timestamp_millis() as u64;
-
-        if external_timestamp > currnet_timestamp {
+        println!(
+            "Before update: timestamp={}, sequence={}, external_timestamp={}, initialized={}",
+            self.timestamp, self.sequence, external_timestamp, self.initialized
+        );
+    
+        if !self.initialized {
             self.timestamp = external_timestamp;
             self.sequence = 0;
-        } else if external_timestamp == currnet_timestamp {
+            self.initialized = true;
+        } else if external_timestamp > self.timestamp {
+            self.timestamp = external_timestamp;
+            self.sequence = 0;
+        } else if external_timestamp == self.timestamp {
             self.sequence += 1;
         } else {
-            self.timestamp = currnet_timestamp;
+            self.timestamp = Utc::now().timestamp_millis() as u64;
             self.sequence = 0;
         }
+    
+        println!(
+            "After update: timestamp={}, sequence={}, initialized={}",
+            self.timestamp, self.sequence, self.initialized
+        );
     }
 
     pub fn current_timestamp(&self) -> u64 {
