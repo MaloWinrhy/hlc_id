@@ -12,6 +12,10 @@ impl HybridLogicalClock {
         }
     }
 
+    pub fn update(&mut self, external_timestamp: u64) {
+        self.timestamp = self.timestamp.max(external_timestamp);
+    }
+
     pub fn current_timestamp(&self) -> u64 {
         self.timestamp
     }
