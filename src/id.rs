@@ -1,4 +1,5 @@
 use chrono::Utc;
+use base64::{engine::general_purpose::STANDARD as Engine, Engine as _};
 
 use crate::clock::HybridLogicalClock;
 
@@ -37,6 +38,21 @@ impl HLCId {
             node_id,
             sequence,
         }
+    }
+
+    pub fn encode_base64(&self) -> String {
+        let id = self.to_u128();
+        Engine.encode(&id.to_be_bytes())
+    }
+
+    pub fn decode_base64(encoded: &str) -> Result<Self, String> {
+        let decoded = Engine.decode(encoded).map_err(|e| e.to_string())?;
+        let id_as_u128 = u128::from_be_bytes(
+            decoded
+                .try_into()
+                .map_err(|_| "Failed to convert decoded bytes to u128".to_string())?,
+        );
+        Ok(Self::from_u128(id_as_u128))
     }
 }
 
