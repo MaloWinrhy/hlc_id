@@ -1,0 +1,13 @@
+[package]
+name = "hlc_id"
+version = "0.1.0"
+authors = ["Malo Winrhy Henry <malo@arkada.fr>"]
+description = "A Rust library for generating and managing Hybrid Logical Clock (HLC)-based IDs."
+license = "MIT"
+repository = "https://github.com/MaloWinrhy/hlc_id"
+homepage = "https://github.com/MaloWinrhy/hlc_id"
+edition = "2021"
+
+[dependencies]
+chrono = "0.4.39"
+base64 = "0.22.1"
