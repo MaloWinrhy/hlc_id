@@ -8,7 +8,7 @@ impl HybridLogicalClock {
     pub fn new(node_id : u16) -> HybridLogicalClock {
         HybridLogicalClock {
             timestamp: 0,
-            node_id: node_id,
+            node_id,
         }
     }
 
