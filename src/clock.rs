@@ -38,4 +38,8 @@ impl HybridLogicalClock {
     pub fn node_id(&self) -> u16 {
         self.node_id
     }
+
+    pub fn current_sequence(&self) -> u16 {
+        self.sequence
+    }
 }
