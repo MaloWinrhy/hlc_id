@@ -29,3 +29,18 @@ fn test_hlc_id_to_u128() {
     assert_eq!(reconstructed_id.sequence, hlc_id.sequence);
     assert_eq!(reconstructed_id.node_id, hlc_id.node_id);
 }
+
+#[test]
+fn test_hlc_id_base64_encoding() {
+    let mut clock = HybridLogicalClock::new(42); 
+    let hlc_id = HLCId::generate(&mut clock);
+
+    let encoded = hlc_id.encode_base64();
+    println!("Encoded HLC ID: {}", encoded);
+
+    let decoded_hlc_id = HLCId::decode_base64(&encoded).unwrap();
+
+    assert_eq!(decoded_hlc_id.timestamp, hlc_id.timestamp);
+    assert_eq!(decoded_hlc_id.node_id, hlc_id.node_id);
+    assert_eq!(decoded_hlc_id.sequence, hlc_id.sequence);
+}
