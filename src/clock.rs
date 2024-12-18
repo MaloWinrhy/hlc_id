@@ -20,7 +20,7 @@ impl HybridLogicalClock {
         self.timestamp
     }
 
-    fn node_id(&self) -> u16 {
+    pub fn node_id(&self) -> u16 {
         self.node_id
     }
 }
