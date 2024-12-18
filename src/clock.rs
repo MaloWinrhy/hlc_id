@@ -19,4 +19,8 @@ impl HybridLogicalClock {
     pub fn current_timestamp(&self) -> u64 {
         self.timestamp
     }
+
+    fn node_id(&self) -> u16 {
+        self.node_id
+    }
 }
