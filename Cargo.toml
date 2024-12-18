@@ -6,7 +6,13 @@ description = "A Rust library for generating and managing Hybrid Logical Clock (
 license = "MIT"
 repository = "https://github.com/MaloWinrhy/hlc_id"
 homepage = "https://github.com/MaloWinrhy/hlc_id"
+documentation = "https://docs.rs/hlc_id"
+readme = "README.md"
+keywords = ["hlc", "hybrid-logical-clock", "id", "unique", "timestamp"]
 edition = "2021"
+
+[lib]
+doctest = true
 
 [dependencies]
 chrono = "0.4.39"
