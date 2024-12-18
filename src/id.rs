@@ -3,6 +3,7 @@ use base64::{engine::general_purpose::STANDARD as Engine, Engine as _};
 
 use crate::clock::HybridLogicalClock;
 
+#[derive(Debug)]
 pub struct HLCId {
     pub timestamp: u64,
     pub sequence: u16,

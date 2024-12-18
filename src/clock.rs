@@ -20,10 +20,6 @@ impl HybridLogicalClock {
     }
 
     pub fn update(&mut self, external_timestamp: u64) {
-        println!(
-            "Before update: timestamp={}, sequence={}, external_timestamp={}, initialized={}",
-            self.timestamp, self.sequence, external_timestamp, self.initialized
-        );
     
         if !self.initialized {
             self.timestamp = external_timestamp;
@@ -38,11 +34,6 @@ impl HybridLogicalClock {
             self.timestamp = Utc::now().timestamp_millis() as u64;
             self.sequence = 0;
         }
-    
-        println!(
-            "After update: timestamp={}, sequence={}, initialized={}",
-            self.timestamp, self.sequence, self.initialized
-        );
     }
 
     pub fn current_timestamp(&self) -> u64 {
