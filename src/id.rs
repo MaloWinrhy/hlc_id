@@ -17,7 +17,12 @@ impl HLCId {
             sequence: clock.current_sequence(),
             node_id: clock.node_id(),
         }
-       
+    }
+
+    pub fn to_u128(&self) -> u128 {
+        ((self.timestamp as u128) << 64)
+         | ((self.node_id as u128) << 46)
+         | self.sequence as u128
     }
 }
 
