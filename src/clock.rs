@@ -1,5 +1,7 @@
 use chrono::Utc;
+use base64::{engine::general_purpose::STANDARD as Engine, Engine as _};
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct HybridLogicalClock {
     timestamp: u64,
     sequence: u16,
@@ -8,11 +10,9 @@ pub struct HybridLogicalClock {
 }
 
 impl HybridLogicalClock {
-
-    pub fn new(node_id : u16) -> HybridLogicalClock {
-        let timestamp = Utc::now().timestamp_millis() as u64;
-        HybridLogicalClock {
-            timestamp,
+    pub fn new(node_id: u16) -> Self {
+        Self {
+            timestamp: 0,
             sequence: 0,
             node_id,
             initialized: false,
@@ -20,14 +20,10 @@ impl HybridLogicalClock {
     }
 
     pub fn update(&mut self, external_timestamp: u64) {
-    
-        if !self.initialized {
+        if !self.initialized || external_timestamp > self.timestamp {
             self.timestamp = external_timestamp;
             self.sequence = 0;
             self.initialized = true;
-        } else if external_timestamp > self.timestamp {
-            self.timestamp = external_timestamp;
-            self.sequence = 0;
         } else if external_timestamp == self.timestamp {
             self.sequence += 1;
         } else {

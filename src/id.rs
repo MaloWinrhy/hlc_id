@@ -1,9 +1,8 @@
 use chrono::Utc;
 use base64::{engine::general_purpose::STANDARD as Engine, Engine as _};
-
 use crate::clock::HybridLogicalClock;
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct HLCId {
     pub timestamp: u64,
     pub sequence: u16,
@@ -11,12 +10,11 @@ pub struct HLCId {
 }
 
 impl HLCId {
-
     pub fn generate(clock: &mut HybridLogicalClock) -> Self {
         let current_timestamp = Utc::now().timestamp_millis() as u64;
         clock.update(current_timestamp);
     
-        HLCId {
+        Self {
             timestamp: clock.current_timestamp(),
             sequence: clock.current_sequence(),
             node_id: clock.node_id(),
@@ -31,10 +29,10 @@ impl HLCId {
 
     pub fn from_u128(id: u128) -> Self {
         let timestamp = (id >> 64) as u64;
-        let node_id = ((id >> 48) & 0x3FF) as u16;
-        let sequence = (id & 0x3FFFF) as u16;
+        let node_id = ((id >> 48) & 0xFFFF) as u16;
+        let sequence = (id & 0xFFFF) as u16;
 
-        HLCId {
+        Self {
             timestamp,
             node_id,
             sequence,
@@ -48,12 +46,10 @@ impl HLCId {
 
     pub fn decode_base64(encoded: &str) -> Result<Self, String> {
         let decoded = Engine.decode(encoded).map_err(|e| e.to_string())?;
-        let id_as_u128 = u128::from_be_bytes(
-            decoded
-                .try_into()
-                .map_err(|_| "Failed to convert decoded bytes to u128".to_string())?,
-        );
+        if decoded.len() != 16 {
+            return Err("Invalid decoded byte length".to_string());
+        }
+        let id_as_u128 = u128::from_be_bytes(decoded.try_into().unwrap());
         Ok(Self::from_u128(id_as_u128))
     }
 }
-
