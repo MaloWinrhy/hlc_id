@@ -12,7 +12,6 @@ HLC ID is a Rust library designed to generate, manage, and encode Hybrid Logical
 - Compact Representation: Stores IDs as 128-bit integers.
 - Base64 Encoding: Encodes IDs for easier transmission and storage.
 - Custom Node IDs: Assigns unique identifiers per instance.
-- Persistence Support: Save and restore clocks for continuity.
 - Event Comparison: Compare events to determine their relative order.
 
 ## Installation
@@ -70,8 +69,6 @@ cargo run --example generate_id
 - `new(node_id: u16) -> HybridLogicalClock`: Creates a new logical clock.
 - `update(&mut self, external_timestamp: u64)`: Updates the clock with an external timestamp.
 - `process_timestamp(&mut self, received_timestamp: u64)`: Adjusts the clock based on incoming event timestamps.
-- `save_state(&self, path: &str) -> std::io::Result<()>`: Saves clock state to a file.
-- `load_state(path: &str) -> std::io::Result<Self>`: Loads a clock from a saved state.
 
 ### HLCId
 - `generate(clock: &mut HybridLogicalClock, timestamp: u64) -> HLCId`: Generates a new HLC-based identifier.
