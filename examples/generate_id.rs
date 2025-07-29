@@ -4,7 +4,7 @@ use chrono::Utc;
 fn main() {
     let mut clock = HybridLogicalClock::new(42); // Node ID = 42
 
-    let hlc_id = HLCId::generate(&mut clock, Utc::now().timestamp_millis() as u64);
+    let hlc_id = HLCId::now(&mut clock);
     println!("Generated HLC ID: {:?}", hlc_id);
 
     let encoded = hlc_id.encode_base64();

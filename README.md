@@ -1,3 +1,11 @@
+# Changelog
+
+### 0.1.6 (2025-07-29)
+- Implemented the `Display` trait for `HLCId` (pretty base64 output).
+- Added `HLCId::now(&mut clock)` to generate an ID with the current timestamp.
+- Updated examples and tests to use these new features.
+
+
 # HLC ID - Hybrid Logical Clock Identifiers
 
 [![Crates.io](https://img.shields.io/crates/v/hlc_id.svg)](https://crates.io/crates/hlc_id)
@@ -14,6 +22,8 @@ HLC ID is a Rust library designed to generate, manage, and encode Hybrid Logical
 - Custom Node IDs: Assigns unique identifiers per instance.
 - Persistence Support: Save and restore clocks for continuity.
 - Event Comparison: Compare events to determine their relative order.
+- `Display` trait for `HLCId`: pretty base64 output for easy logging and debugging.
+- `HLCId::now(&mut clock)`: generate an ID with the current UTC timestamp easily.
 
 ## Installation
 
@@ -21,7 +31,7 @@ Add `hlc_id` to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-hlc_id = "0.1.4"
+hlc_id = "0.1.6"
 ```
 
 Run `cargo build` to download and compile the library.
@@ -32,23 +42,19 @@ Run `cargo build` to download and compile the library.
 
 ```rust
 use hlc_id::{clock::HybridLogicalClock, id::HLCId};
-use chrono::Utc;
 
 fn main() {
     let mut clock = HybridLogicalClock::new(42);
-    let timestamp = Utc::now().timestamp_millis() as u64;
-
-    let hlc_id = HLCId::generate(&mut clock, timestamp);
-    println!("Generated ID: {:?}", hlc_id);
-
-    let id_as_u128 = hlc_id.to_u128();
-    println!("ID as 128-bit integer: {}", id_as_u128);
+    // Generate an ID with the current timestamp (UTC, ms)
+    let hlc_id = HLCId::now(&mut clock);
+    // Display as base64 (Display trait)
+    println!("HLC ID (base64): {}", hlc_id);
 
     let encoded = hlc_id.encode_base64();
-    println!("Encoded ID (Base64): {}", encoded);
+    println!("Encoded Base64: {}", encoded);
 
-    let decoded_id = HLCId::decode_base64(&encoded).unwrap();
-    println!("Decoded ID: {:?}", decoded_id);
+    let decoded = HLCId::decode_base64(&encoded).unwrap();
+    println!("Decoded HLC ID: {:?}", decoded);
 }
 ```
 
