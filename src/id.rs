@@ -1,3 +1,4 @@
+use std::fmt;
 use base64::{engine::general_purpose::STANDARD as Engine, Engine as _};
 use serde::{Serialize, Deserialize};
 use crate::clock::HybridLogicalClock;
@@ -7,6 +8,12 @@ pub struct HLCId {
     pub timestamp: u64,
     pub sequence: u16,
     pub node_id: u16,
+}
+// Implémentation de Display pour HLCId
+impl fmt::Display for HLCId {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.encode_base64())
+    }
 }
 
 impl HLCId {
