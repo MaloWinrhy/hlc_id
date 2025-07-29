@@ -9,7 +9,7 @@ pub struct HLCId {
     pub sequence: u16,
     pub node_id: u16,
 }
-// Implémentation de Display pour HLCId
+
 impl fmt::Display for HLCId {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.encode_base64())
@@ -43,6 +43,11 @@ impl HLCId {
             node_id,
             sequence,
         }
+    }
+
+    pub fn now(clock: &mut HybridLogicalClock) -> Self {
+        let timestamp = chrono::Utc::now().timestamp_millis() as u64;
+        Self::generate(clock, timestamp)
     }
 
     pub fn encode_base64(&self) -> String {

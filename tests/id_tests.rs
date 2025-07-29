@@ -10,12 +10,21 @@ fn test_hlc_id_display_trait() {
     assert_eq!(display_str, encoded, "Display needs to match base64 encoding");
 }
 
+#[test]
+fn test_hlc_id_now() {
+    let mut clock = HybridLogicalClock::new(42);
+    let hlc_id = HLCId::now(&mut clock);
+    assert_eq!(hlc_id.node_id, 42);
+    assert!(hlc_id.timestamp > 0);
+    let encoded = hlc_id.encode_base64();
+    let decoded = HLCId::decode_base64(&encoded).unwrap();
+    assert_eq!(decoded, hlc_id);
+}
 
 #[test]
 fn test_hlc_id_generation() {
     let mut clock = HybridLogicalClock::new(42);
     
-    // On capture le même timestamp pour s'assurer que la séquence s'incrémente bien.
     let timestamp = Utc::now().timestamp_millis() as u64;
 
     let hlc_id = HLCId::generate(&mut clock, timestamp);
