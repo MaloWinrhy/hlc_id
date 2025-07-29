@@ -2,6 +2,16 @@ use hlc_id::{clock::HybridLogicalClock, id::HLCId};
 use chrono::Utc;
 
 #[test]
+fn test_hlc_id_display_trait() {
+    let mut clock = HybridLogicalClock::new(42);
+    let hlc_id = HLCId::generate(&mut clock, Utc::now().timestamp_millis() as u64);
+    let display_str = format!("{}", hlc_id);
+    let encoded = hlc_id.encode_base64();
+    assert_eq!(display_str, encoded, "Display needs to match base64 encoding");
+}
+
+
+#[test]
 fn test_hlc_id_generation() {
     let mut clock = HybridLogicalClock::new(42);
     
